@@ -1,0 +1,604 @@
+<!-- 参考学习了https://www.bilibili.com/video/BV1Kg411T7t9/?spm_id_from=333.337 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>音乐报告</title>
+    <meta charset="UTF-8">
+    <script src="js_files/Gradient.js" ></script>
+<style>
+        #gradient-canvas {
+            --gradient-color-1: #cfd9df;
+            --gradient-color-2: #d1d8fb;
+            --gradient-color-3: #dbe999;
+            --gradient-color-4: #e2a7ab;
+            position: absolute;
+            display: block;
+
+        }
+        @keyframes rotate360 {
+        from {
+            transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            }
+        }
+        @keyframes fade-in {
+            0%{opacity: 0;}
+            100%{opacity: 1;}
+        }
+        @keyframes fade-out {
+            0%{opacity: 1;}
+            1%{opacity: 0;}
+        }
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(60%);
+                }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                }
+        }
+        .page.all_titles{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 100px;
+        align-items: center;
+        justify-content: center;
+        color: #2f3233;font-size:xx-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+        opacity: 1;
+        animation: fade-in 1s forwards;
+        }
+       .page.card{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid rgb(203, 191, 191);
+        box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;}
+
+    #title1{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 38%;
+    top: 8px;
+    }
+   #title2{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 36.5%;
+    top: 8px;
+   }
+   #title3{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 36.5%;
+    top: 8px;
+   }
+   #title4{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 38%;
+    top: 8px;
+   }
+   #title5{width: 900px;
+    height: 30px;
+    position: absolute;
+    left:2%;
+    top: 10px;
+    font-size:6cqh;
+   }
+   #title6{width: 900px;
+    height: 30px;
+    position: absolute;
+    left:2%;
+    top: 30px;
+    font-size:6cqh;
+   }
+    #tag1{width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 650px;
+    top: 100px;
+    {% if not data.tag1 is defined %}
+        z-index:0;
+    {% endif %}
+    }
+    #tag2{width: 270px;
+    height: 270px;
+    position: absolute;
+    left: 1030px;
+    top: 180px;
+    {% if not data.tag2 is defined %}
+    z-index:0;
+    {% endif %}
+    }
+    #tag3{width: 230px;
+    height: 230px;
+    position: absolute;
+    left: 225px;
+    top: 230px;
+    {% if not data.tag3 is defined %}
+    z-index:0;
+    {% endif %}
+    }
+    #tag4{width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 820px;
+    top: 400px;
+    {% if not data.tag4 is defined %}
+    z-index:0;
+    {% endif %}
+    }
+    #tag5{width: 180px;
+    height: 180px;
+    position: absolute;
+    left: 515px;
+    top: 450px;
+    {% if not data.tag5 is defined %}
+    z-index:0;
+    {% endif %}
+    }
+    #button1{width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    position: absolute;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+    }
+    #button2{width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    position: absolute;
+    left: 1350px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+    }
+.page { display: none; }
+.active { display: flex; }
+@font-face{font-family:'ZoomlaCarved'; /*逐浪海棠居刻本字*/
+    src: url('https://code.z01.com/font/ZoomlaCarved.eot?#iefix'); /* IE9 */
+    src: url('https://code.z01.com/font/ZoomlaCarved.eot?#iefix') format("embedded-opentype"), /* IE6-IE8 */
+    url('https://code.z01.com/font/ZoomlaCarved.woff') format("woff"), /* chrome、firefox */
+    url('https://code.z01.com/font/ZoomlaCarved.ttf') format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+    url('https://code.z01.com/font/ZoomlaCarved.svg#ZoomlaCarved') format("svg"); /* iOS 4.1- */
+    font-style: normal; font-weight: normal;}
+
+        *{
+        user-select: none;
+        /* 无法选中，整体感更强 */
+        }
+        html, body {
+        margin:0;
+        padding:0;
+        }
+.page.card{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid rgb(203, 191, 191);
+        box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 2s;
+       }
+        #start_button{
+            position: absolute;
+            left:41%;top:40%;z-index: 1;
+            border-bottom-left-radius: 8px 8px;
+            border-bottom-right-radius: 8px 8px;
+            border-top-left-radius: 8px 8px;
+            border-top-right-radius: 8px 8px;
+            font-family:'ZoomlaCarved' ;
+            font-size: xx-large;
+            border: 2px solid rgb(203, 191, 191);
+            box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        }
+        #start_button:hover{background-color:antiquewhite;}
+        #button1:hover{background-color:antiquewhite;}
+        #button2:hover{background-color:antiquewhite;}
+        #button3:hover{background-color:antiquewhite;}
+        #artist1{
+        {% if not data.artist1 is defined %}z-index:0;{% endif %}}
+        #artist2{
+        {% if not data.artist2 is defined %}z-index:0;{% endif %}}
+        #artist3{
+        {% if not data.artist3 is defined %}z-index:0;{% endif %}}
+
+        #comment1{
+        {% if not data.comment1 is defined %}z-index:0;{% endif %}}
+        #comment2{
+        {% if not data.comment2 is defined %}z-index:0;{% endif %}}
+        #comment3{
+        {% if not data.comment3 is defined %}z-index:0;{% endif %}}
+        #comment4{
+        {% if not data.comment4 is defined %}z-index:0;{% endif %}}
+        #comment5{
+        {% if not data.comment5 is defined %}z-index:0;{% endif %}}
+</style>
+
+<script>
+    function switch_page() {
+    var current_page = document.querySelector(".page.active");
+    var next_page = current_page.nextElementSibling;
+    if (next_page) {
+        current_page.classList.remove("active");
+        next_page.classList.add("active");
+
+        var child_elements = next_page.querySelectorAll("*");
+        child_elements.forEach(function(element) {
+            element.style.display = "flex";
+        });
+    }
+}
+</script>
+<script>function toggleMusic() {
+    var audio = document.getElementById('bgMusic');
+    audio.play();
+}</script>
+<script>function start(){toggleMusic();switch_page();}</script>
+</head>
+
+<body>
+<audio id="bgMusic" src="music/Gael - Venice.mp3" autoplay loop></audio>
+<button onclick="start()" class="page active" id="start_button">点击解锁你的音乐报告</button>
+
+<div class="page" id="page1">
+        <h1 class="page all_titles" id="title1">你的听歌偏好是</h1>
+        <div class="page card" id="tag1" style="color: #4e5355;font-size:6cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+            {% if data.tag1 is defined %} {{ data.tag1[0] }} {% endif %}<br>{% if data.tag1 is defined %} {{ data.tag1[1] }} {% endif %}
+        </div>
+        <div class="page card" id="tag2" style="color: #4e5355;font-size:5.5cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+            {% if data.tag2 is defined %} {{ data.tag2[0] }} {% endif %}<br>{% if data.tag2 is defined %} {{ data.tag2[1] }} {% endif %}
+        </div>
+        <div class="page card" id="tag3" style="color: #4e5355;font-size:4.8cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+            {% if data.tag3 is defined %} {{ data.tag3[0] }} {% endif %}<br>{% if data.tag3 is defined %} {{ data.tag3[1] }} {% endif %}
+        </div>
+        <div class="page card" id="tag4" style="color: #4e5355;font-size:3.8cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+            {% if data.tag4 is defined %} {{ data.tag4[0] }} {% endif %}<br>{% if data.tag4 is defined %} {{ data.tag4[1] }} {% endif %}
+        </div>
+        <div class="page card" id="tag5" style="color: #4e5355;font-size:3.5cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+            {% if data.tag5 is defined %} {{ data.tag5[0] }} {% endif %}<br>{% if data.tag5 is defined %} {{ data.tag5[1] }} {% endif %}
+        </div>
+        <button class="page card" id="button1" onclick="switch_page()">下一页</button>
+</div>
+
+<div class="page" id="page2">
+    <h1 class="page all_titles" id="title2">你最喜欢的歌手是</h1>
+
+    {% if data.artist1 is defined %}
+    <div id="artist1">
+        <p style="color: #f1ff76;font-weight: bolder;font-size:5.5cqh;text-shadow: #d3cb88;font-family:'ZoomlaCarved';position: absolute;left:52%;top:10%;z-index: 1;">1</p>
+        <img src="{{data.img1}}" style="position: absolute;left:46%;top:25%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(245, 252, 160);box-shadow: #474747; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:52%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">{{ data.artist1[0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">收藏歌曲数：{{ data.artist1[1] }}</p>
+    </div>
+    {% endif %}
+
+    {% if data.artist2 is defined %}
+    <div id="artist2">
+        <p style="color: #fffbf0f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #857f7f;font-family:'ZoomlaCarved';position: absolute;left:29%;top:17%;z-index: 1;">2</p>
+        <img src="{{data.img2}}" style="position: absolute;left:23%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(232, 232, 232);box-shadow: #d3cb88; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">{{ data.artist2[0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">收藏歌曲数：{{ data.artist2[1] }}</p>
+    </div>
+    {% endif %}
+
+    {% if data.artist3 is defined %}
+    <div id="artist3">
+        <p style="color: #e5c467f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #bbbf8f;font-family:'ZoomlaCarved';position: absolute;right:24%;top:17%;z-index: 1;">3</p>
+        <img src="{{data.img3}}" style="position: absolute;right:18%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(202, 158, 88);box-shadow: #9b8645; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">{{ data.artist3[0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">收藏歌曲数：{{ data.artist3[1] }}</p>
+    </div>
+    {% endif %}
+
+
+    <button onclick="switch_page()" id="button2" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page3">
+    <h1 class="page all_titles" id="title3">你最喜欢的歌曲是</h1>
+
+    {% if data.play_count|length >= 1 %}
+    <div>
+        <p style="color: #f1ff76;font-weight: bolder;font-size:5.5cqh;text-shadow: #d3cb88;font-family:'ZoomlaCarved';position: absolute;left:52%;top:10%;z-index: 1;">1</p>
+        <img src="{{data.album_img[0]}}" style="position: absolute;left:46%;top:25%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(245, 252, 160);box-shadow: #474747; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:33.5%;top:52.5%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">{{ data.play_count[0][0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:59.5%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">播放次数：{{ data.play_count[0][1] }}</p>
+    </div>
+    {% endif %}
+
+    {% if data.play_count|length >= 2 %}
+    <div>
+        <p style="color: #fffbf0f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #857f7f;font-family:'ZoomlaCarved';position: absolute;left:29%;top:17%;z-index: 1;">2</p>
+        <img src="{{data.album_img[1]}}" style="position: absolute;left:23%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(232, 232, 232);box-shadow: #d3cb88; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:10.5%;top:59%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">{{ data.play_count[1][0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">播放次数：{{ data.play_count[1][1] }}</p>
+    </div>
+    {% endif %}
+
+    {% if data.play_count|length >= 3 %}
+    <div>
+        <p style="color: #e5c467f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #bbbf8f;font-family:'ZoomlaCarved';position: absolute;right:24%;top:17%;z-index: 1;">3</p>
+        <img src="{{data.album_img[2]}}" style="position: absolute;right:18%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(202, 158, 88);box-shadow: #9b8645; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:5.5%;top:59%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">{{ data.play_count[2][0] }}</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">播放次数：{{ data.play_count[2][1] }}</p>
+    </div>
+    {% endif %}
+
+
+    <button onclick="switch_page()" id="button3" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page4">
+    <h1 class="page all_titles" id="title4">你的评论区关键词是</h1>
+
+    {% if data.comment1 is defined %}
+    <div id="comment1">
+        <p style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;bottom:39%;z-index: 1;width:400px;height:400px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 1s;background-image:url('images/dialog_box1.png');background-repeat: no-repeat;
+    background-size: cover;background-position: center;">{{data.comment1[0]}}<br>出现次数：{{data.comment1[1]}}</p>
+    </div>
+    {% endif %}
+
+    {% if data.comment2 is defined %}
+    <div id="comment2">
+        <p style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:60%;bottom:31%;z-index: 1;width:350px;height:350px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 2s;background-image:url('images/dialog_box2.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">{{data.comment2[0]}}<br>出现次数：{{data.comment2[1]}}</p>
+    </div>
+    {% endif %}
+
+    {% if data.comment3 is defined %}
+    <div id="comment3">
+       <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43%;bottom:23%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 3s;background-image:url('images/dialog_box3.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">{{data.comment3[0]}}<br>出现次数：{{data.comment3[1]}}</p>
+    </div>
+    {% endif %}
+
+    {% if data.comment4 is defined %}
+    <div id="comment4">
+       <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:25%;bottom:11%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 4s;background-image:url('images/dialog_box4.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">{{data.comment4[0]}}<br>出现次数：{{data.comment4[1]}}</p>
+    </div>
+    {% endif %}
+
+    {% if data.comment5 is defined %}
+    <div id="comment5">
+        <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:63%;bottom:5%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 5s;background-image:url('images/dialog_box5.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">{{data.comment5[0]}}<br>出现次数：{{data.comment5[1]}}</p>
+    </div>
+    {% endif %}
+
+    <button onclick="switch_page()" id="button4" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page5">
+    <h1 class="page all_titles" id="title5">根据你的听歌喜好，你可能还喜欢......</h1>
+
+    {% if data.rec_songs|length >= 1 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[0][1][0] }}" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:17%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 1s;">1.{{ data.rec_songs[0][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 2 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[1][1][0] }}" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:25%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 2s;">2.{{ data.rec_songs[1][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 3 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[2][1][0] }}" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:33%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 3s;">3.{{ data.rec_songs[2][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 4 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[3][1][0] }}" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:41%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 4s;">4.{{ data.rec_songs[3][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 5 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[4][1][0] }}" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:49%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 5s;">5.{{ data.rec_songs[4][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 6 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[5][1][0] }}" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:57%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 6s;">6.{{ data.rec_songs[5][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 7 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[6][1][0] }}" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:65%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 7s;">7.{{ data.rec_songs[6][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 8 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[7][1][0] }}" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:73%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 8s;">8.{{ data.rec_songs[7][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 9 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[8][1][0] }}" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:81%;z-index: 1;width:800px;height:20px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 9s;">9.{{ data.rec_songs[8][0] }}</a>
+    {% endif %}
+
+    {% if data.rec_songs|length >= 10 %}
+    <a href="https://music.163.com/#/song?id={{ data.rec_songs[9][1][0] }}" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:89%;z-index: 1;width:800px;height:20px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 10s;">10.{{ data.rec_songs[9][0] }}</a>
+    {% endif %}
+
+    <img src="images/abbey-road.png" style="width:500px;height:500px;z-index:1;position:absolute;top:100px;right:80px;">
+    <button onclick="switch_page()" id="button5" style="animation:fade-in 2s forwards;animation-delay:11s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page6">
+    <h1 class="page all_titles" id="title6">那些与你相伴在评论区的乐迷朋友......</h1>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:7%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(60%);">他们的平均年龄为&nbsp;<span style="font-size:10cqh; color:#eeff38;animation: fade-in-up 2s forwards; animation-delay: 1s;opacity:0;">{{ data.age }}</span>&nbsp;岁</p>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:30%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(30%);">他们大多数来自&nbsp;&nbsp;<span style="font-size:10cqh; color:#ff6744;animation: fade-in-up 1.5s forwards; animation-delay: 2s;opacity:0;">{{ data.city}}</span></p>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:53%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(10%);">和你一样，他们也喜欢&nbsp;&nbsp;<span style="font-size:10cqh; color:#449eff;animation: fade-in-up 1.5s forwards; animation-delay: 3s;opacity:0;">{{ data.pref }}</span>&nbsp;&nbsp;等曲风</p>
+
+    <img src="images/vinyl.png" style="width:450px;height:450px;z-index:1;position:absolute;top:100px;right:120px;animation:rotate360 10s forwards linear infinite;">
+    <img src="images/music.png" style="width:200px;height:60px;z-index:1;position:absolute;top:90px;right:50px;">
+
+
+</div>
+
+
+<canvas id="gradient-canvas" style="width:100%;height:100%;"></canvas>
+<script src="js_files/show_in_order.js"></script>
+<script>
+    var gradient = new Gradient()
+    gradient.initGradient('#gradient-canvas');
+</script>
+</body>
+</html>

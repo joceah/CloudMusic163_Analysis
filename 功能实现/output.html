@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>音乐报告</title>
+    <meta charset="UTF-8">
+    <script src="js_files/Gradient.js" ></script>
+<style>
+        #gradient-canvas {
+            --gradient-color-1: #cfd9df;
+            --gradient-color-2: #d1d8fb;
+            --gradient-color-3: #dbe999;
+            --gradient-color-4: #e2a7ab;
+            position: absolute;
+            display: block;
+
+        }
+        @keyframes rotate360 {
+        from {
+            transform: rotate(0deg);
+            }
+        to {
+            transform: rotate(360deg);
+            }
+        }
+        @keyframes fade-in {
+            0%{opacity: 0;}
+            100%{opacity: 1;}
+        }
+        @keyframes fade-out {
+            0%{opacity: 1;}
+            1%{opacity: 0;}
+        }
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(60%);
+                }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                }
+        }
+        .page.all_titles{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 100px;
+        align-items: center;
+        justify-content: center;
+        color: #2f3233;font-size:xx-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+        opacity: 1;
+        animation: fade-in 1s forwards;
+        }
+       .page.card{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid rgb(203, 191, 191);
+        box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;}
+
+    #title1{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 38%;
+    top: 8px;
+    }
+   #title2{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 36.5%;
+    top: 8px;
+   }
+   #title3{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 36.5%;
+    top: 8px;
+   }
+   #title4{width: 300px;
+    height: 50px;
+    position: absolute;
+    right: 38%;
+    top: 8px;
+   }
+   #title5{width: 900px;
+    height: 30px;
+    position: absolute;
+    left:2%;
+    top: 10px;
+    font-size:6cqh;
+   }
+   #title6{width: 900px;
+    height: 30px;
+    position: absolute;
+    left:2%;
+    top: 30px;
+    font-size:6cqh;
+   }
+    #tag1{width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 650px;
+    top: 100px;
+    
+    }
+    #tag2{width: 270px;
+    height: 270px;
+    position: absolute;
+    left: 1030px;
+    top: 180px;
+    
+    }
+    #tag3{width: 230px;
+    height: 230px;
+    position: absolute;
+    left: 225px;
+    top: 230px;
+    
+    }
+    #tag4{width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 820px;
+    top: 400px;
+    
+    }
+    #tag5{width: 180px;
+    height: 180px;
+    position: absolute;
+    left: 515px;
+    top: 450px;
+    
+    }
+    #button1{width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    position: absolute;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+    }
+    #button2{width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    position: absolute;
+    left: 1350px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';
+    }
+.page { display: none; }
+.active { display: flex; }
+@font-face{font-family:'ZoomlaCarved'; /*逐浪海棠居刻本字*/
+    src: url('https://code.z01.com/font/ZoomlaCarved.eot?#iefix'); /* IE9 */
+    src: url('https://code.z01.com/font/ZoomlaCarved.eot?#iefix') format("embedded-opentype"), /* IE6-IE8 */
+    url('https://code.z01.com/font/ZoomlaCarved.woff') format("woff"), /* chrome、firefox */
+    url('https://code.z01.com/font/ZoomlaCarved.ttf') format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+ */
+    url('https://code.z01.com/font/ZoomlaCarved.svg#ZoomlaCarved') format("svg"); /* iOS 4.1- */
+    font-style: normal; font-weight: normal;}
+
+        *{
+        user-select: none;
+        /* 无法选中，整体感更强 */
+        }
+        html, body {
+        margin:0;
+        padding:0;
+        }
+.page.card{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid rgb(203, 191, 191);
+        box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 2s;
+       }
+        #start_button{
+            position: absolute;
+            left:41%;top:40%;z-index: 1;
+            border-bottom-left-radius: 8px 8px;
+            border-bottom-right-radius: 8px 8px;
+            border-top-left-radius: 8px 8px;
+            border-top-right-radius: 8px 8px;
+            font-family:'ZoomlaCarved' ;
+            font-size: xx-large;
+            border: 2px solid rgb(203, 191, 191);
+            box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        }
+        #start_button:hover{background-color:antiquewhite;}
+        #button1:hover{background-color:antiquewhite;}
+        #button2:hover{background-color:antiquewhite;}
+        #button3:hover{background-color:antiquewhite;}
+        #artist1{
+        }
+        #artist2{
+        }
+        #artist3{
+        }
+
+        #comment1{
+        }
+        #comment2{
+        }
+        #comment3{
+        }
+        #comment4{
+        }
+        #comment5{
+        }
+</style>
+
+<script>
+    function switch_page() {
+    var current_page = document.querySelector(".page.active");
+    var next_page = current_page.nextElementSibling;
+    if (next_page) {
+        current_page.classList.remove("active");
+        next_page.classList.add("active");
+
+        var child_elements = next_page.querySelectorAll("*");
+        child_elements.forEach(function(element) {
+            element.style.display = "flex";
+        });
+    }
+}
+</script>
+<script>function toggleMusic() {
+    var audio = document.getElementById('bgMusic');
+    audio.play();
+}</script>
+<script>function start(){toggleMusic();switch_page();}</script>
+</head>
+
+<body>
+<audio id="bgMusic" src="music/Gael - Venice.mp3" autoplay loop></audio>
+<button onclick="start()" class="page active" id="start_button">点击解锁你的音乐报告</button>
+
+<div class="page" id="page1">
+        <h1 class="page all_titles" id="title1">你的听歌偏好是</h1>
+        <div class="page card" id="tag1" style="color: #4e5355;font-size:6cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+             另类/独立 <br> 11.7% 
+        </div>
+        <div class="page card" id="tag2" style="color: #4e5355;font-size:5.5cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+             流行 <br> 7.7% 
+        </div>
+        <div class="page card" id="tag3" style="color: #4e5355;font-size:4.8cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+             嘻哈说唱 <br> 7.1% 
+        </div>
+        <div class="page card" id="tag4" style="color: #4e5355;font-size:3.8cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+             摇滚 <br> 6.5% 
+        </div>
+        <div class="page card" id="tag5" style="color: #4e5355;font-size:3.5cqh;text-shadow: #80596c;font-family:'ZoomlaCarved';">
+             节奏布鲁斯 <br> 4.9% 
+        </div>
+        <button class="page card" id="button1" onclick="switch_page()">下一页</button>
+</div>
+
+<div class="page" id="page2">
+    <h1 class="page all_titles" id="title2">你最喜欢的歌手是</h1>
+
+    
+    <div id="artist1">
+        <p style="color: #f1ff76;font-weight: bolder;font-size:5.5cqh;text-shadow: #d3cb88;font-family:'ZoomlaCarved';position: absolute;left:52%;top:10%;z-index: 1;">1</p>
+        <img src="http://p1.music.126.net/SSb0qRQ_ewpZsBkrVZwm1g==/109951168299106672.jpg" style="position: absolute;left:46%;top:25%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(245, 252, 160);box-shadow: #474747; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:52%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">Frank Ocean</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">收藏歌曲数：42</p>
+    </div>
+    
+
+    
+    <div id="artist2">
+        <p style="color: #fffbf0f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #857f7f;font-family:'ZoomlaCarved';position: absolute;left:29%;top:17%;z-index: 1;">2</p>
+        <img src="http://p2.music.126.net/hXANw1HpMaPkCZj1Hgx8Iw==/109951166119528567.jpg" style="position: absolute;left:23%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(232, 232, 232);box-shadow: #d3cb88; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">Tyler, The Creator</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">收藏歌曲数：24</p>
+    </div>
+    
+
+    
+    <div id="artist3">
+        <p style="color: #e5c467f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #bbbf8f;font-family:'ZoomlaCarved';position: absolute;right:24%;top:17%;z-index: 1;">3</p>
+        <img src="http://p2.music.126.net/G5Up7x470vyQnuTN6Fq6JQ==/109951166345896642.jpg" style="position: absolute;right:18%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(202, 158, 88);box-shadow: #9b8645; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:59%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">Kanye West</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">收藏歌曲数：23</p>
+    </div>
+    
+
+
+    <button onclick="switch_page()" id="button2" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page3">
+    <h1 class="page all_titles" id="title3">你最喜欢的歌曲是</h1>
+
+    
+    <div>
+        <p style="color: #f1ff76;font-weight: bolder;font-size:5.5cqh;text-shadow: #d3cb88;font-family:'ZoomlaCarved';position: absolute;left:52%;top:10%;z-index: 1;">1</p>
+        <img src="http://p3.music.126.net/9sTLpi_LneFP_FPcaNgnQQ==/109951168609412948.jpg" style="position: absolute;left:46%;top:25%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(245, 252, 160);box-shadow: #474747; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:33.5%;top:52.5%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">Carry On</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43.5%;top:59.5%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;">播放次数：291</p>
+    </div>
+    
+
+    
+    <div>
+        <p style="color: #fffbf0f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #857f7f;font-family:'ZoomlaCarved';position: absolute;left:29%;top:17%;z-index: 1;">2</p>
+        <img src="http://p4.music.126.net/9sTLpi_LneFP_FPcaNgnQQ==/109951168609412948.jpg" style="position: absolute;left:23%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(232, 232, 232);box-shadow: #d3cb88; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:10.5%;top:59%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">Depression & Obsession</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 1s;">播放次数：263</p>
+    </div>
+    
+
+    
+    <div>
+        <p style="color: #e5c467f7;font-weight: bolder;font-size:5.5cqh;text-shadow: #bbbf8f;font-family:'ZoomlaCarved';position: absolute;right:24%;top:17%;z-index: 1;">3</p>
+        <img src="http://p4.music.126.net/9sTLpi_LneFP_FPcaNgnQQ==/109951168609412948.jpg" style="position: absolute;right:18%;top:31%;z-index: 1;height: 200px;width:200px;border:2mm ridge rgb(202, 158, 88);box-shadow: #9b8645; opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">
+        <p style="color: #2b2b2a;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:5.5%;top:59%;z-index: 1;width:600px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">Jocelyn Flores</p>
+        <p style="color: #686854;font-weight: bolder;font-size:2.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;right:15.5%;top:66%;z-index: 1;width:300px;height:100px;text-align: center;display:flex;align-content: center;justify-content: center;opacity: 0;
+        transform: translateY(60%);
+        animation: fade-in-up 2s forwards;animation-delay: 2s;">播放次数：251</p>
+    </div>
+    
+
+
+    <button onclick="switch_page()" id="button3" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page4">
+    <h1 class="page all_titles" id="title4">你的评论区关键词是</h1>
+
+    
+    <div id="comment1">
+        <p style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:20.5%;bottom:39%;z-index: 1;width:400px;height:400px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 1s;background-image:url('images/dialog_box1.png');background-repeat: no-repeat;
+    background-size: cover;background-position: center;">喜欢<br>出现次数：418</p>
+    </div>
+    
+
+    
+    <div id="comment2">
+        <p style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:60%;bottom:31%;z-index: 1;width:350px;height:350px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 2s;background-image:url('images/dialog_box2.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">音乐<br>出现次数：225</p>
+    </div>
+    
+
+    
+    <div id="comment3">
+       <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:43%;bottom:23%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 3s;background-image:url('images/dialog_box3.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">感觉<br>出现次数：187</p>
+    </div>
+    
+
+    
+    <div id="comment4">
+       <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:25%;bottom:11%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 4s;background-image:url('images/dialog_box4.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">希望<br>出现次数：143</p>
+    </div>
+    
+
+    
+    <div id="comment5">
+        <p style="color: #686854;font-weight: bolder;font-size:3cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:63%;bottom:5%;z-index: 1;width:270px;height:270px;text-align: center;display:flex;align-content: center;justify-content: center;align-items:center;opacity: 0;
+    animation: fade-in 2s forwards;animation-delay: 5s;background-image:url('images/dialog_box5.png');background-repeat: no-repeat;
+    background-size:contain;background-position: center;">生活<br>出现次数：108</p>
+    </div>
+    
+
+    <button onclick="switch_page()" id="button4" style="animation:fade-in 2s forwards;animation-delay:3s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page5">
+    <h1 class="page all_titles" id="title5">根据你的听歌喜好，你可能还喜欢......</h1>
+
+    
+    <a href="https://music.163.com/#/song?id=1351441825" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:17%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 1s;">1.how you make me feel-burbank</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1942594014" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:25%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 2s;">2.Thinking Bout You-rei brown</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=562598516" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:33%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 3s;">3.Nomadic-Higher Brothers</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1317384277" target="_blank" style="color: #4d4d3e;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:41%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 4s;">4.Did You See Me Cry-Boy Scouts</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=25792114" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:49%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 5s;">5.Daniel-Devendra Banhart</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1357387019" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:57%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 6s;">6.lips-dream wave</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1404755605" target="_blank" style="color: #5c5c4b;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:65%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 7s;">7.Always You-NAZCA</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1397619768" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:73%;z-index: 1;width:800px;height:100px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 8s;">8.The Shining Mountain-Hanging Valleys</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=530986226" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:81%;z-index: 1;width:800px;height:20px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 9s;">9.Swings-Duumu</a>
+    
+
+    
+    <a href="https://music.163.com/#/song?id=1307804662" target="_blank" style="color: #686854;font-weight: bolder;font-size:3.5cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:8.5%;top:89%;z-index: 1;width:800px;height:20px;text-align:left;display:flex;align-content: left;justify-content: left;opacity: 0;
+    transform: translateY(60%);
+    animation: fade-in-up 2s forwards;animation-delay: 10s;">10.Satellite-Dustin Tebbutt</a>
+    
+
+    <img src="images/abbey-road.png" style="width:500px;height:500px;z-index:1;position:absolute;top:100px;right:80px;">
+    <button onclick="switch_page()" id="button5" style="animation:fade-in 2s forwards;animation-delay:11s;
+    position: absolute;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid rgb(203, 191, 191);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    width: 150px;
+    height: 50px;
+    border-radius: 0%;
+    border-top-left-radius: 20px 20px;
+    left: 1300px;
+    top: 630px;
+    color: #2f3233;font-size:x-large;text-shadow: #80596c;font-family:'ZoomlaCarved';"
+    >下一页</button>
+
+</div>
+
+<div class="page" id="page6">
+    <h1 class="page all_titles" id="title6">那些与你相伴在评论区的乐迷朋友......</h1>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:7%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(60%);">他们的平均年龄为&nbsp;<span style="font-size:10cqh; color:#eeff38;animation: fade-in-up 2s forwards; animation-delay: 1s;opacity:0;">24</span>&nbsp;岁</p>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:30%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(30%);">他们大多数来自&nbsp;&nbsp;<span style="font-size:10cqh; color:#ff6744;animation: fade-in-up 1.5s forwards; animation-delay: 2s;opacity:0;">成都市</span></p>
+
+    <p style="color: #4d4d3e;font-weight: bolder;font-size:3.8cqh;text-shadow: #b5b4b1;font-family:'ZoomlaCarved';position: absolute;left:11.5%;top:53%;z-index: 1;width:800px;height:100px;text-align: left; display: flex; align-items: center; justify-content: flex-start;opacity: 1;
+    transform: translateY(10%);">和你一样，他们也喜欢&nbsp;&nbsp;<span style="font-size:10cqh; color:#449eff;animation: fade-in-up 1.5s forwards; animation-delay: 3s;opacity:0;">欧美、流行</span>&nbsp;&nbsp;等曲风</p>
+
+    <img src="images/vinyl.png" style="width:450px;height:450px;z-index:1;position:absolute;top:100px;right:120px;animation:rotate360 10s forwards linear infinite;">
+    <img src="images/music.png" style="width:200px;height:60px;z-index:1;position:absolute;top:90px;right:50px;">
+
+
+</div>
+
+
+<canvas id="gradient-canvas" style="width:100%;height:100%;"></canvas>
+<script src="js_files/show_in_order.js"></script>
+<script>
+    var gradient = new Gradient()
+    gradient.initGradient('#gradient-canvas');
+</script>
+</body>
+</html>
